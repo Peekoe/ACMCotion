@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node ./build/app.js",
+    "start": "tsc --build && node ./build/app.js",
     "build" : "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
