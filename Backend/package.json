@@ -1,0 +1,26 @@
+{
+  "name": "cotion-api",
+  "version": "1.0.0",
+  "description": "Canvas and Notion integration",
+  "main": "app.ts",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "tsc --build && node ./build/app.js",
+    "build" : "tsc --build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACMCSUFDEVPROJECTS/Cotion.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ACMCSUFDEVPROJECTS/Cotion/issues"
+  },
+  "homepage": "https://github.com/ACMCSUFDEVPROJECTS/Cotion#readme"
+}
