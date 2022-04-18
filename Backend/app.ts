@@ -29,5 +29,5 @@ app.use(
 app.use(Router);
 
 app.listen(PORT, () => {
-    logging.info(NAMESPACE, `Port is running on ${PORT}`); 
+    logging.info(NAMESPACE, `Port is running on ${PORT}`);
 });
