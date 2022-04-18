@@ -1,6 +1,6 @@
 import express from 'express';
 import PingController from '../controllers/ping';
-import canvasToNotion from '../controllers/canvasToNotion';
+import Assignments from '../controllers/canvasToNotion';
 
 const NAMESPACE: string = "Router";
 
@@ -18,9 +18,19 @@ router.post('/ping', async (req, res) => {
     return res.send(response);
 });
 
-router.get('/allAssignments', async (req, res) => {
-    let response = await canvasToNotion.getAssignmentsFromCourses();
-    return res.send(response);
+router.post('/assignments', async (req, res) => {
+    let ass = new Assignments();
+    let {domain, canvasToken, notionDb, notionToken} = req.body;
+    await ass.importAssignments(domain, canvasToken, notionDb, notionToken);
+    return res.json({ message: 'Successfully imported all assignments' });
+});
+
+// not currently working
+router.patch('/assignments', async (req, res) => {
+    let ass = new Assignments();
+    let {domain, canvasToken, notionDb, notionToken} = req.body;
+    await ass.importAssignments(domain, canvasToken, notionDb, notionToken, true);
+    return res.json({ message: 'Successfully imported all assignments' });
 });
 
 export default router;

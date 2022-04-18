@@ -4,7 +4,6 @@ import morgan from 'morgan';
 import Router from './routes';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
-import canvasToNotion from './controllers/canvasToNotion';
 const NAMESPACE = 'App';
 
 const PORT = process.env.PORT || 8000;
