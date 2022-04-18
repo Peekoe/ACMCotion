@@ -10,9 +10,6 @@ const NOTION_REDIRECT_URI = process.env.NOTION_REDIRECT_URI || '';
 const CANVAS_TOKEN = process.env.CANVAS_API_TOKEN || '';
 const CANVAS_API_DOMAIN = process.env.CANVAS_API_DOMAIN || '';
 
-console.log(`Canvas_Token: ${CANVAS_TOKEN}`);
-console.log(`Canvas_API_Domain: ${CANVAS_API_DOMAIN}`);
-console.log(path.resolve(__dirname, '..') + '\\.env');
 
 const NOTION = {
     secret: NOTION_SECRET,

@@ -2,11 +2,12 @@ import logging from '../utils/logging';
 import { Client } from '@notionhq/client';
 import config from '../utils/config';
 import axios from 'axios';
-import { Request } from 'tsoa';
+import { Patch, Post, Request, Route } from 'tsoa';
 
-const NAMESPACE = 'yeet';
+const NAMESPACE = 'CanvasToNotion';
 
-// req should have domain, canvasToken, notionDb, notionToken
+// investigate why the routes are being weird here
+@Route('assignments')
 export default class Assignments {
     public async importAssignments(domain: string, canvasToken: string, notionDb: string, notionToken: string, update = false){
         let courses: any;
@@ -88,8 +89,6 @@ export default class Assignments {
                 }
             }
         }
-
-        console.log('success?');
     };
 
     public formatAssignment(assignment: { name: string; course: string; description: string; due_date: string; points: number; link: string }) {
