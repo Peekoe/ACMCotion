@@ -1,6 +1,6 @@
 import logging from '../utils/logging';
 import { Client } from '@notionhq/client';
-import config from '../utils/config';
+//import config from '../utils/config';
 import axios from 'axios';
 import { Patch, Post, Request, Route } from 'tsoa';
 
@@ -47,11 +47,12 @@ export default class Assignments {
             try {
                 let assignment = await canvas.get(`/courses/${course}/assignments`);
 
-                var mapped = assignment.data.map((result: { id: any; name: any; course_id: string | number; due_at: any; points_possible: any; html_url: any }) => {
+                var mapped = assignment.data.map((result: { id: any; name: any; course_id: string | number; description: string; due_at: any; points_possible: any; html_url: any }) => {
                     return {
                         id: result.id,
                         name: result.name,
                         course: courses[course],
+                        description: this.stripHTML(result.description),
                         due_date: result.due_at,
                         points: result.points_possible,
                         link: result.html_url
@@ -115,6 +116,17 @@ export default class Assignments {
                   }
                 ]
               },
+              Description: {
+                'rich_text': [
+                  {
+                    'type': 'text',
+                    'text': {
+                      'content': description,
+                      link: null
+                    }
+                  }
+                ]
+              },
             'Due Date': {
               'date': {
                 'start': new Date(due_date).toISOString() ?? null,
@@ -128,5 +140,10 @@ export default class Assignments {
               'url': link
             }
         }
+    }
+
+    private stripHTML(html: string) : string {
+      var strippedHtml = html ? html.replace(/<[^>]+>/g, '') : html;
+      return strippedHtml ? strippedHtml.replace(/(<([^>]+)>)/gi, '').substring(0, 2000) : html.substring(0, 2000);
     }
 }
