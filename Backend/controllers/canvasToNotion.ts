@@ -144,6 +144,6 @@ export default class Assignments {
 
     private stripHTML(html: string) : string {
       var strippedHtml = html ? html.replace(/<[^>]+>/g, '') : html;
-      return strippedHtml ? strippedHtml.replace(/(<([^>]+)>)/gi, '').substring(0, 2000) : html.substring(0, 2000);
+      return strippedHtml ? strippedHtml.replace(/(<([^>]+)>)/gi, '').substring(0, 200) + '...' : html.substring(0, 200) + '...';
     }
 }
