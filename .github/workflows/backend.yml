@@ -5,8 +5,7 @@ name: ICON Backend CI
 
 defaults:
   run:
-    working-directory: Backend
-
+    working-directory: ./Backend/
 
 on:
   push:
@@ -33,14 +32,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
-    - name: Cache Dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+        cache-dependency-path: './Backend/package-lock.json'
         
     - name: Install Dependencies
       run: npm ci
