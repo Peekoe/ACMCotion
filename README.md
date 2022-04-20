@@ -1,2 +1,2 @@
-# Cotion
+# ICON
 Canvas with Notion integration
