@@ -1,10 +1,13 @@
 import type { NextPage } from 'next'
+import Banner from './components/Banner'
+
+
 
 const Home: NextPage = () => {
   return (
-    <h1 className="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <section className='flex my-12 mx-[80px] font-poppins'>
+    <Banner/>
+    </section>
   )
 }
 
