@@ -1,26 +1,35 @@
 import logging from '../utils/logging';
 import { Client } from '@notionhq/client';
-//import config from '../utils/config';
 import axios from 'axios';
-import { Patch, Post, Request, Route } from 'tsoa';
+import { Body, Get, Post, Query, Route } from 'tsoa';
+import { DateTime } from 'luxon';
 
 const NAMESPACE = 'CanvasToNotion';
+
+interface ImportModel {
+    domain: string;
+    canvasToken: string;
+    notionDb: string;
+    notionToken: string;
+    timeZone: string;
+    update?: boolean;
+}
 
 // investigate why the routes are being weird here
 @Route('assignments')
 export default class Assignments {
-    public async importAssignments(domain: string, canvasToken: string, 
-        notionDb: string, notionToken: string, update = false) : Promise<string[]> {
+    @Post('/')
+    public async importAssignments(@Body() params: ImportModel): Promise<string[]> {
         let courses: any;
         let errors: string[] = [];
 
         let notionClient = new Client({
-            auth: notionToken
+            auth: params.notionToken
         });
 
         let canvas = axios.create({
-            baseURL: domain + '/api/v1/',
-            headers: { Authorization: `Bearer ${canvasToken}` }
+            baseURL: params.domain + '/api/v1/',
+            headers: { Authorization: `Bearer ${params.canvasToken}` }
         });
 
         // get courses and filter out ones from the past
@@ -53,8 +62,10 @@ export default class Assignments {
                         id: result.id,
                         name: result.name,
                         course: courses[course],
-                        description: this.stripHTML(result.description),
-                        due_date: result.due_at,
+                        description: result.description != null ? this.stripHTML(result.description) : '',
+                        due_date: result.due_at == null || result.due_at == undefined
+                            ? new Date().toISOString()
+                            : DateTime.fromISO(result.due_at).setZone(params.timeZone).toISO(),
                         points: result.points_possible,
                         link: result.html_url
                     };
@@ -68,7 +79,7 @@ export default class Assignments {
 
         // format assignments and upload to notion
         for (const assignment of assignments) {
-            if (update) {
+            if (params.update) {
                 // basically same code as below but update stuff
                 break;
             } else {
@@ -76,7 +87,7 @@ export default class Assignments {
                     await Promise.all(
                         assignment.map((result: { name: string; course?: string; description?: string; due_date: string; points?: number; link?: string }) => {
                             notionClient.pages.create({
-                                parent: { database_id: notionDb },
+                                parent: { database_id: params.notionDb },
                                 // @ts-ignore
                                 properties: this.formatAssignment(result)
                             });
@@ -131,7 +142,7 @@ export default class Assignments {
             },
             'Due Date': {
                 date: {
-                    start: new Date(due_date).toISOString() ?? null,
+                    start: due_date ?? null,
                     end: null
                 }
             },

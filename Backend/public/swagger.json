@@ -17,6 +17,38 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ImportModel": {
+				"properties": {
+					"domain": {
+						"type": "string"
+					},
+					"canvasToken": {
+						"type": "string"
+					},
+					"notionDb": {
+						"type": "string"
+					},
+					"notionToken": {
+						"type": "string"
+					},
+					"timeZone": {
+						"type": "string"
+					},
+					"update": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"domain",
+					"canvasToken",
+					"notionDb",
+					"notionToken",
+					"timeZone",
+					"update"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -75,6 +107,38 @@
 						}
 					}
 				]
+			}
+		},
+		"/assignments": {
+			"post": {
+				"operationId": "ImportAssignments",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ImportModel"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

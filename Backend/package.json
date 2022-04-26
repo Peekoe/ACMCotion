@@ -9,6 +9,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "luxon": "^2.3.2",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^4.3.0",
     "tsoa": "^3.14.1"
@@ -17,6 +18,7 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
+    "@types/luxon": "^2.3.1",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.21",
     "@types/nodemon": "^1.19.1",
@@ -31,10 +33,13 @@
   },
   "scripts": {
     "start": "tsc --build && node ./build/app.js",
-    "open": "open http://localhost:8000",
+    "open-win": "start http://localhost:8000",
+    "open-mac": "open http://localhost:8000",
     "predev": "npm run swagger",
     "prebuild": "npm run swagger",
-    "dev": "npm run open && concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
+    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
+    "dev-windows": "npm run open-win && concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
+    "dev-mac": "npm run open-mac && concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
     "build": "tsc --build",
     "test": "jest",
     "swagger": "tsoa spec"
