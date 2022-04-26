@@ -32,6 +32,9 @@
 					"notionToken": {
 						"type": "string"
 					},
+					"timeZone": {
+						"type": "string"
+					},
 					"update": {
 						"type": "boolean"
 					}
@@ -41,6 +44,7 @@
 					"canvasToken",
 					"notionDb",
 					"notionToken",
+					"timeZone",
 					"update"
 				],
 				"type": "object",
