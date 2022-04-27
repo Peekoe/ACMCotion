@@ -2,15 +2,17 @@ import logging from '../utils/logging';
 import { Client } from '@notionhq/client';
 import axios from 'axios';
 import { Body, Get, Post, Query, Route } from 'tsoa';
+import { DateTime } from 'luxon';
 
 const NAMESPACE = 'CanvasToNotion';
 
 interface ImportModel {
-  domain: string,
-  canvasToken: string,
-  notionDb: string,
-  notionToken: string,
-  update: boolean
+    domain: string;
+    canvasToken: string;
+    notionDb: string;
+    notionToken: string;
+    timeZone: string;
+    update?: boolean;
 }
 
 // investigate why the routes are being weird here
@@ -60,8 +62,10 @@ export default class Assignments {
                         id: result.id,
                         name: result.name,
                         course: courses[course],
-                        description: this.stripHTML(result.description),
-                        due_date: result.due_at,
+                        description: result.description != null ? this.stripHTML(result.description) : '',
+                        due_date: result.due_at == null || result.due_at == undefined
+                            ? new Date().toISOString()
+                            : DateTime.fromISO(result.due_at).setZone(params.timeZone).toISO(),
                         points: result.points_possible,
                         link: result.html_url
                     };
@@ -138,7 +142,7 @@ export default class Assignments {
             },
             'Due Date': {
                 date: {
-                    start: new Date(due_date).toISOString() ?? null,
+                    start: due_date ?? null,
                     end: null
                 }
             },

@@ -19,14 +19,14 @@ router.get('/ping', async (_req, res) => {
 });
 
 router.post('/ping', async (req, res) => {
-    const response = { message: req.query.message};
+    const response = { message: req.query.message };
     return res.send(response);
 });
 
 router.post('/assignments', async (req, res) => {
     let ass = new Assignments();
-    let {domain, canvasToken, notionDb, notionToken} = req.body;
-    let errors = await ass.importAssignments({domain, canvasToken, notionDb, notionToken, update: false});
+    let {domain, canvasToken, notionDb, notionToken, timeZone} = req.body;
+    let errors = await ass.importAssignments({domain, canvasToken, notionDb, notionToken, timeZone, update: false});
     return res.json({ message: 'Import completed', errors });
 });
 
