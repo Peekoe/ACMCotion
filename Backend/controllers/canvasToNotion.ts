@@ -6,7 +6,7 @@ import { DateTime } from 'luxon';
 
 const NAMESPACE = 'CanvasToNotion';
 
-interface ImportModel {
+interface ImportRequest {
     domain: string;
     canvasToken: string;
     notionDb: string;
@@ -19,7 +19,7 @@ interface ImportModel {
 @Route('assignments')
 export default class Assignments {
     @Post('/')
-    public async importAssignments(@Body() params: ImportModel) : Promise<string[]> {
+    public async importAssignments(@Body() params: ImportRequest) : Promise<string[]> {
         let courses: any;
         let errors: string[] = [];
 
@@ -35,25 +35,33 @@ export default class Assignments {
         // get courses and filter out ones from the past
         try {
             let course = await canvas.get('/courses');
-            courses = course.data.map((course: { id: string; name: string; end_at: string }) => {
-                // Probably not the best solution?
-                if (Date.parse(course.end_at ?? '01/01/1971') > Date.now()) {
-                    return {
-                        [course.id]: course.name
-                    };
-                }
-            });
+            if(course != null || course != undefined) {
+                courses = course.data.map((course: { id: string; name: string; end_at: string }) => {
+                    // Probably not the best solution?
+                    if (Date.parse(course.end_at ?? '01/01/1971') > Date.now()) {
+                        return {
+                            [course.id]: course.name
+                        };
+                    }
+                });
+            } else {
+                return errors;
+            };
         } catch (error) {
             logging.error(NAMESPACE, 'Could not get courses', error);
             errors.push(`Could not get courses from Canvas`);
         }
 
+        if(courses == undefined || courses == null) {
+            return errors;
+        }
+
         let assignments: any = [];
         // map class id and name to dictionary
-        courses = Object.assign({}, ...courses);
+        let courseIds: string[] = Object.assign({}, ...courses);
 
         // get assignments from the canvas API and extract useful info
-        for (const course in courses) {
+        for (const course in courseIds) {
             try {
                 let assignment = await canvas.get(`/courses/${course}/assignments`);
 
@@ -61,7 +69,7 @@ export default class Assignments {
                     return {
                         id: result.id,
                         name: result.name,
-                        course: courses[course],
+                        course: courseIds[course],
                         description: result.description != null ? this.stripHTML(result.description) : '',
                         due_date: result.due_at == null || result.due_at == undefined
                             ? new Date().toISOString()
@@ -157,6 +165,6 @@ export default class Assignments {
 
     private stripHTML(html: string): string {
         var strippedHtml = html ? html.replace(/<[^>]+>/g, '') : html;
-        return strippedHtml ? strippedHtml.replace(/(<([^>]+)>)/gi, '').substring(0, 200) + '...' : html.substring(0, 200) + '...';
+        return strippedHtml ? strippedHtml.replace(/(<([^>]+)>)/gi, '').substring(0, 200) : html.substring(0, 200);
     }
 }
