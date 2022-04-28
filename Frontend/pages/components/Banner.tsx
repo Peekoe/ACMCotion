@@ -7,7 +7,7 @@ import BannerDecor from "../../assets/bannerDecor.svg";
 export const Banner: React.FC = () => {
   return (
     <section className="grid grid-cols-[1.2fr,1.2fr,0.8fr] items-center py-7 w-[100%] rounded-xl h-[500px] bg-pink-500 text-white font-semibold">
-      <div className="w-[24em] h-[24em] ml-10">
+      <div className="max-w-[24em] max-h-[24em] ml-10">
         <Image src={Logo} />
       </div>
       <div className="flex items-center flex-col text-center text-[2.25rem]">
