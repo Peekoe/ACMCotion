@@ -10,7 +10,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        "pink-500": "#FF6682"
+        "pink-500": "#FF6682",
+        "pink-300": "#FF94A7",
+        "pink-200":"#FFEFF2",
       },
       fontSize: {
         13: "13px",

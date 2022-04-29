@@ -15,7 +15,7 @@ interface instructionType {
   image: string[];
 }
 
-const squareVariants = {
+export const squareVariants = {
   visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } },
   hidden: { opacity: 0, scale: 0 },
 };
@@ -88,7 +88,7 @@ export const InstructionPic: React.FC<picProps> = (props) => {
       variants={squareVariants}
       className="mt-10"
     >
-      <Image src={picUrl} />
+      <Image src={picUrl} alt="instruction"/>
     </motion.div>
   );
 };
