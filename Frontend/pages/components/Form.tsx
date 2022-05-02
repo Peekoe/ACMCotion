@@ -31,7 +31,11 @@ const Form: NextPage = () => {
     e.preventDefault();
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     try {
-      await axios.post("/assignments", HARD_CODED_DATA);
+      await fetch("http://localhost:8000/assignments", {
+        method: "POST",
+        body: JSON.stringify(HARD_CODED_DATA),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
+      });
     } catch (err) {
       console.log(err);
     }
