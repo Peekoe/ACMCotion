@@ -5,19 +5,36 @@ import frontCircle from "../../assets/frontCircle.svg";
 import backCircle from "../../assets/backCircle.svg";
 import Image from "next/image";
 import NotionAuthButton from "./NotionAuth";
+import axios from "axios";
+
+export interface AuthType {
+  canvasToken: string;
+  domain: string;
+  notionDb: string;
+  notionToken: string;
+  timeZone: string;
+}
+
+const HARD_CODED_DATA: AuthType = {
+  canvasToken:
+    "349~RqZkQfRjPwIAZVgGQ3sFYnRtE98Q1Ih5S6nWWJnwpsvDSgHYbPJsFS7pAwW17G8Q",
+  domain: "https://csufullerton.instructure.com",
+  notionDb: "6bb16c50206040f0bd7b84aa855cb116",
+  notionToken: "secret_sj1CMfsYx1zORR5Z8uMrdTGjuMg5QPC3IfPGOmdfNTF",
+  timeZone: "America/Los_Angeles",
+};
 
 const Form: NextPage = () => {
   const [canvasDomain, setCanvasDomain] = useState<string>("");
   const [canvasToken, setCanvasToken] = useState<string>("");
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const data = {
-      canvasToken: canvasToken,
-      canvasDomain: canvasDomain,
-      timeZone: timeZone,
-    };
-    console.log(data);
+    try {
+      await axios.post("/assignments", HARD_CODED_DATA);
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <form
